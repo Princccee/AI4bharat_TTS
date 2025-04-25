@@ -42,4 +42,7 @@ if __name__ == "__main__":
     parser.add_argument("--out", type=str, default="output.wav", help="Output audio file name")
 
     args = parser.parse_args()
+
+    if not args.text:
+        args.text = input("📝 Enter text in any Indian language: ")
     text_to_speech(args.text, args.desc, args.out)
