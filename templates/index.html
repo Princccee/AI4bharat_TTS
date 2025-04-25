@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Indic TTS Demo</title>
+</head>
+<body>
+  <h2>Text to Speech (Indian Languages)</h2>
+  <form id="ttsForm">
+    <label for="text">Text:</label><br>
+    <textarea id="text" name="text" rows="4" cols="50">नमस्ते! आपका स्वागत है।</textarea><br><br>
+    <label for="lang">Language Code:</label>
+    <input type="text" id="lang" name="lang" value="hin"><br><br>
+    <button type="submit">Generate Speech</button>
+  </form>
+  <audio id="audioPlayer" controls></audio>
+
+  <script>
+    document.getElementById('ttsForm').onsubmit = async function(event) {
+      event.preventDefault();
+      const text = document.getElementById('text').value;
+      const lang = document.getElementById('lang').value;
+      
+      const response = await fetch('/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, lang })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        document.getElementById('audioPlayer').src = audioUrl;
+      } else {
+        alert("Error: " + await response.text());
+      }
+    };
+  </script>
+</body>
+</html>
